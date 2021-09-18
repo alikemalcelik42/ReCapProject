@@ -1,4 +1,5 @@
 ﻿using Business.Concrete;
+using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using System;
@@ -10,32 +11,17 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            CarManager carManager = new CarManager(new InMemoryCarDal());
+            CarManager carManager = new CarManager(new EfCarDal());
 
-            Car car = new Car()
-            {
-                Id = 4,
-                BrandId = 3,
-                ColorId = 1,
-                ModelYear = 2015,
-                DailyPrice = 350,
-                Description = "Çok Temiz 316i Comfort Borusan Bakımlı"
-            };
-
-            carManager.Add(car);
-            car.DailyPrice = 375;
-            carManager.Update(car);
-
-            List<Car> cars = carManager.GetAll();
-
+            List<Car> cars = carManager.GetAllByDailyPrice(250, 300);
             foreach(Car _car in cars)
             {
-                Console.WriteLine(_car.Id);
-                Console.WriteLine(_car.BrandId);
-                Console.WriteLine(_car.ColorId);
-                Console.WriteLine(_car.ModelYear);
-                Console.WriteLine(_car.DailyPrice);
-                Console.WriteLine(_car.Description);
+                Console.WriteLine($"Id: {_car.Id}");
+                Console.WriteLine($"BrandId: {_car.BrandId}");
+                Console.WriteLine($"ColorId: {_car.ColorId}");
+                Console.WriteLine($"ModelYear: {_car.ModelYear}");
+                Console.WriteLine($"DailyPrice: {_car.DailyPrice}");
+                Console.WriteLine($"Description: {_car.Description}");
                 Console.WriteLine();
             }
         }
