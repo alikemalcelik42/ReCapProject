@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Core.Utilities.Helpers.FileHelpers
+namespace Business.Helpers.FileHelpers
 {
     public static class CarImageFileHelper
     {
