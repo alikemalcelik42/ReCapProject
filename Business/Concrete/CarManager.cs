@@ -13,10 +13,11 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Business.BusinessAspects.Autofac;
 
 namespace Business.Concrete
 {
-    public class CarManager : ICarService
+    public partial class CarManager : ICarService
     {
         ICarDal _carDal;
 
@@ -25,6 +26,7 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+        [SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
@@ -37,6 +39,7 @@ namespace Business.Concrete
             _carDal.Delete(car);
             return new SuccessResult(Messages.CarDeleted);
         }
+
 
         public IDataResult<List<Car>> GetAll()
         {
