@@ -13,29 +13,39 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarImageController : ControllerBase
+    public class CarImageFileController : ControllerBase
     {
-        ICarImageService _carImageService;
+        ICarImageFileService _carImageFileService;
 
-        public CarImageController(ICarImageService carImageService)
+        public CarImageFileController(ICarImageFileService carImageFileService)
         {
-            _carImageService = carImageService;
-        }
-
-        [HttpGet("getall")]
-        public IActionResult GetAll()
-        {
-            var result = _carImageService.GetAll();
-            
-            if(result.Success)
-                return Ok(result);
-            return BadRequest(result);
+            _carImageFileService = carImageFileService;
         }
 
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromForm] IFormFile imageFile, [FromForm] CarImage carImage)
         {
-            var result = _carImageService.AddImage(carImage, imageFile);
+            var result = _carImageFileService.AddImage(carImage, imageFile);
+
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = _carImageFileService.GetAllImages();
+
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpGet("getallbycarid")]
+        public async Task<IActionResult> GetAllByCarId(int carId)
+        {
+            var result = _carImageFileService.GetAllImagesByCarId(carId);
 
             if (result.Success)
                 return Ok(result);
@@ -45,7 +55,7 @@ namespace WebAPI.Controllers
         [HttpPost("delete")]
         public async Task<IActionResult> Delete([FromForm] CarImage carImage)
         {
-            var result = _carImageService.DeleteImage(carImage);
+            var result = _carImageFileService.DeleteImage(carImage);
 
             if (result.Success)
                 return Ok(result);
@@ -55,7 +65,7 @@ namespace WebAPI.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromForm] IFormFile imageFile, [FromForm] CarImage carImage)
         {
-            var result = _carImageService.UpdateImage(carImage, imageFile);
+            var result = _carImageFileService.UpdateImage(carImage, imageFile);
 
             if (result.Success)
                 return Ok(result);

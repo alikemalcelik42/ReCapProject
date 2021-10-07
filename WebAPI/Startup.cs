@@ -1,5 +1,7 @@
 using Business.Abstract;
 using Business.Concrete;
+using Core.DependencyResolvers.Autofac;
+using Core.Extensions;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
@@ -39,8 +41,6 @@ namespace WebAPI
 
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -55,7 +55,8 @@ namespace WebAPI
                         IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
                     };
                 });
-            ServiceTool.Create(services);
+
+            services.AddDependencyResolvers(new CoreModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

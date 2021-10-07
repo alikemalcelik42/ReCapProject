@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Business.BusinessAspects.Autofac;
+using Core.Aspects.Autofac.Caching;
 
 namespace Business.Concrete
 {
@@ -28,12 +29,15 @@ namespace Business.Concrete
 
         [SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
 
+        [SecuredOperation("car.delete,admin")]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
@@ -41,6 +45,7 @@ namespace Business.Concrete
         }
 
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
@@ -74,6 +79,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarsListed);
         }
 
+        [SecuredOperation("car.update,admin")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             _carDal.Update(car);
