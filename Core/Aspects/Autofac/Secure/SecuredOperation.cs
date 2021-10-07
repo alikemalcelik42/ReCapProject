@@ -7,9 +7,8 @@ using System.Text;
 using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 using Core.Extensions;
-using Business.Constants;
 
-namespace Business.BusinessAspects.Autofac
+namespace Core.Aspects.Autofac.Secure
 {
     public class SecuredOperation : MethodInterception
     {
@@ -33,7 +32,7 @@ namespace Business.BusinessAspects.Autofac
                     return;
                 }
             }
-            throw new Exception(Messages.AuthorizationDenied);
+            throw new Exception("Yetkiniz yok!");
         }
     }
 }

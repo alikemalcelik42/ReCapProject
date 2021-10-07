@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.Helpers.FileHelpers;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Secure;
 using Core.Aspects.Autofac.Transaction;
 using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
@@ -23,6 +25,8 @@ namespace Business.Concrete
             _carImageService = carImageService;
         }
 
+        [SecuredOperation("carimagefile.add,admin")]
+        [CacheRemoveAspect("ICarImageFileService.Get")]
         public IResult AddImage(CarImage carImage, IFormFile imageFile)
         {
             var result = BusinessRules.Run(CheckIfCarImageLimitExceeded(1));
@@ -31,16 +35,20 @@ namespace Business.Concrete
             return _carImageService.Add(carImage);
         }
 
+        [CacheAspect]
         public IDataResult<List<CarImage>> GetAllImages()
         {
             return _carImageService.GetAll();
         }
 
+        [CacheAspect]
         public IDataResult<List<CarImage>> GetAllImagesByCarId(int carId)
         {
             return _carImageService.GetAllByCarId(carId);
         }
 
+        [SecuredOperation("carimagefile.delete,admin")]
+        [CacheRemoveAspect("ICarImageFileService.Get")]
         public IResult DeleteImage(CarImage carImage)
         {
             RemoveImage(carImage.ImagePath);
@@ -48,6 +56,8 @@ namespace Business.Concrete
         }
 
         [TransactionScopeAspect]
+        [SecuredOperation("carimagefile.update,admin")]
+        [CacheRemoveAspect("ICarImageFileService.Get")]
         public IResult UpdateImage(CarImage carImage, IFormFile imageFile)
         {
             var oldCarImage = _carImageService.GetById(carImage.Id).Data;

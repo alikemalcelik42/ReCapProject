@@ -13,7 +13,7 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Business.BusinessAspects.Autofac;
+using Core.Aspects.Autofac.Secure;
 using Core.Aspects.Autofac.Caching;
 
 namespace Business.Concrete
