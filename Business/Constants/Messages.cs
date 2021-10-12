@@ -19,7 +19,6 @@ namespace Business.Constants
         public static string CarImageDeleted = "Araba resim silindi";
         public static string CarImageLimitExceeded = "Bir arabanın maxismum 5 resmi olabilir";
         public static string CarImageUploadFailed = "Araba resmi yüklenirken bir hata oluştu";
-
         public static string UserRegistered = "Kullanıcı kayıt oldu";
         public static string UserNotFound = "Kullanıcı bulunamadı";
         public static string PasswordError = "Şifre hatalı";
@@ -27,5 +26,9 @@ namespace Business.Constants
         public static string UserAlreadyExists = "Kullanıcı zaten kayıtlı";
         public static string AccessTokenCreated = "Bağlantı Jetonu oluşturuldu";
         public static string AuthorizationDenied = "Yetkniz yok";
+        public static string BrandsListed = "Markalar listelendi";
+        public static string BrandUpdated = "Marka güncellendi";
+        public static string BrandDeleted = "Marka silindi";
+        public static string BrandAdded = "Marka eklendi";
     }
 }
