@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Text;
 using Core.Aspects.Autofac.Secure;
 using Core.Aspects.Autofac.Caching;
+using Core.Utilities.Business;
 
 namespace Business.Concrete
 {
@@ -48,6 +49,11 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
+            var result = BusinessRules.Run(MaintentenceTime());
+
+            if (result != null)
+                return new ErrorDataResult<List<Car>>(result.Message);
+
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }
 
@@ -86,6 +92,15 @@ namespace Business.Concrete
         {
             _carDal.Update(car);
             return new SuccessResult(Messages.CarUpdated);
+        }
+
+        private IResult MaintentenceTime()
+        {
+            if(DateTime.Now.Hour == 2)
+            {
+                return new ErrorResult("Sistem bakımda");
+            }
+            return new SuccessResult();
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Core.Utilities.Results.Abstract;
+﻿using Business.Constants;
+using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,10 @@ namespace Business.Helpers.FileHelpers
 {
     public static class CarImageFileHelper
     {
-        private static string carImageFolderName = "Images/CarImages/";
+        private static string carImageFolderName = "Images\\CarImages";
         private static string root = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "Business", carImageFolderName);
         private static string defaultCarImage = "defaultCar.png";
-        public static string Upload(IFormFile formFile)
+        public static IResult Upload(IFormFile formFile, ref CarImage carImage)
         {
 
             if (formFile.Length > 0)
@@ -28,9 +30,12 @@ namespace Business.Helpers.FileHelpers
                 {
                     formFile.CopyTo(stream);
                 }
-                return filePath;
+
+                carImage.ImagePath = filePath;
+                carImage.Date = DateTime.Now;
+                return new SuccessResult();
             }
-            return "";
+            return new ErrorResult(Messages.CarImageUploadFailed);
         }
 
         public static IResult Delete(string path)
@@ -47,9 +52,9 @@ namespace Business.Helpers.FileHelpers
         }
 
 
-        public static string GetDefaultCarImagePath()
-        {
-            return "/" + carImageFolderName + defaultCarImage;
-        }
+        //public static string GetDefaultCarImagePath()
+        //{
+        //    return "/" + carImageFolderName + defaultCarImage;
+        //}
     }
 }

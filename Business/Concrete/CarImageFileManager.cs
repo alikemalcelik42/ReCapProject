@@ -29,9 +29,12 @@ namespace Business.Concrete
         [CacheRemoveAspect("ICarImageFileService.Get")]
         public IResult AddImage(CarImage carImage, IFormFile imageFile)
         {
-            var result = BusinessRules.Run(CheckIfCarImageLimitExceeded(1));
+            var result = BusinessRules.Run(CheckIfCarImageLimitExceeded(carImage.CarId));
 
-            UploadImage(ref carImage, imageFile);
+            if (result != null)
+                return result;
+
+            CarImageFileHelper.Upload(imageFile, ref carImage);
             return _carImageService.Add(carImage);
         }
 
@@ -51,7 +54,7 @@ namespace Business.Concrete
         [CacheRemoveAspect("ICarImageFileService.Get")]
         public IResult DeleteImage(CarImage carImage)
         {
-            RemoveImage(carImage.ImagePath);
+            CarImageFileHelper.Delete(carImage.ImagePath);
             return _carImageService.Delete(carImage);
         }
 
@@ -61,34 +64,16 @@ namespace Business.Concrete
         public IResult UpdateImage(CarImage carImage, IFormFile imageFile)
         {
             var oldCarImage = _carImageService.GetById(carImage.Id).Data;
-            IResult result;
             
-            result = RemoveImage(oldCarImage.ImagePath);
-            if (!result.Success)
-                throw new Exception(result.Message);
+            var deleteResult = CarImageFileHelper.Delete(oldCarImage.ImagePath);
+            if (!deleteResult.Success)
+                throw new Exception(deleteResult.Message);
 
-            result = UploadImage(ref carImage, imageFile);
-            if (!result.Success)
-                throw new Exception(result.Message);
+            var uploadResult = CarImageFileHelper.Upload(imageFile, ref carImage);
+            if (!uploadResult.Success)
+                throw new Exception(uploadResult.Message);
 
             return _carImageService.Update(carImage);
-        }
-
-        private IResult UploadImage(ref CarImage carImage, IFormFile imageFile)
-        {
-            string filePath = CarImageFileHelper.Upload(imageFile);
-            if (filePath != "")
-            {
-                carImage.ImagePath = filePath;
-                carImage.Date = DateTime.Now;
-                return new SuccessResult();
-            }
-            return new ErrorResult(Messages.CarImageUploadFailed);
-        }
-
-        private IResult RemoveImage(string imagePath)
-        {
-            return CarImageFileHelper.Delete(imagePath);
         }
 
         private IResult CheckIfCarImageLimitExceeded(int carId)
