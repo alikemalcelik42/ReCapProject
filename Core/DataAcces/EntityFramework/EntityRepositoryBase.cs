@@ -29,8 +29,7 @@ namespace Core.DataAcces.EntityFramework
             {
                 var deleteCar = context.Entry(entity);
                 deleteCar.State = EntityState.Deleted;
-                // context.SaveChanges();
-                context.SaveChangesAsync();
+                context.SaveChanges();
             }
         }
 

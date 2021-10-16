@@ -48,6 +48,33 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet("getallbydailyprice")]
+        public IActionResult GetAllByDailyPrice(int minDailyPrice, int maxDailyPrice)
+        {
+            var result = _carService.GetAllByDailyPrice(minDailyPrice, maxDailyPrice);
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpGet("getcardetails")]
+        public IActionResult GetCarDetails()
+        {
+            var result = _carService.GetCarDetails();
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpGet("getcardetailbycarid")]
+        public IActionResult GetCarDetailByCarId(int carId)
+        {
+            var result = _carService.GetCarDetailByCarId(carId);
+            if (result.Success)
+                return Ok(result);
+            return Ok(result);
+        }
+
         [HttpPost("add")]
         public IActionResult Add(Car car)
         {

@@ -25,7 +25,7 @@ namespace Business.Concrete
             _carImageService = carImageService;
         }
 
-        [SecuredOperation("carimagefile.add,admin")]
+        // [SecuredOperation("carimagefile.add,admin")]
         [CacheRemoveAspect("ICarImageFileService.Get")]
         public IResult AddImage(CarImage carImage, IFormFile imageFile)
         {
@@ -47,7 +47,8 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<CarImage>> GetAllImagesByCarId(int carId)
         {
-            return _carImageService.GetAllByCarId(carId);
+            var result = GetCarImageByCarIdByCheckIfCarImageNotExists(carId);
+            return result;
         }
 
         [SecuredOperation("carimagefile.delete,admin")]
@@ -84,6 +85,25 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.CarImageLimitExceeded);
             }
             return new SuccessResult();
+        }
+
+        private IDataResult<List<CarImage>> GetCarImageByCarIdByCheckIfCarImageNotExists(int carId)
+        {
+            var carImages = _carImageService.GetAllByCarId(carId);
+            if(carImages.Success == true && carImages.Data.Count == 0)
+            {
+                return new SuccessDataResult<List<CarImage>>(new List<CarImage>()
+                {
+                    new CarImage()
+                    {
+                        Id = 0,
+                        CarId = carId,
+                        ImagePath = CarImageFileHelper.GetDefaultCarImagePath(),
+                        Date = DateTime.Now
+                    }
+                });
+            }
+            return carImages;
         }
     }
 }

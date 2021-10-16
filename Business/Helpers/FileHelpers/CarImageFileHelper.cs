@@ -13,8 +13,14 @@ namespace Business.Helpers.FileHelpers
     public static class CarImageFileHelper
     {
         private static string carImageFolderName = "Images\\CarImages";
-        private static string root = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "Business", carImageFolderName);
+        private static string[] roots = {
+            Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "Business", carImageFolderName),
+            Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "WebAPI", "wwwroot", carImageFolderName)};
         private static string defaultCarImage = "defaultCar.png";
+        private static string baseUrl = "https://localhost:44352/";
+
+        public static object Request { get; private set; }
+
         public static IResult Upload(IFormFile formFile, ref CarImage carImage)
         {
 
@@ -24,25 +30,34 @@ namespace Business.Helpers.FileHelpers
                 string guid = Guid.NewGuid().ToString();
                 string fileExtension = Path.GetExtension(fileName);
                 string newFileName = guid + fileExtension;
-                string filePath = root + $@"\{newFileName}";
+                var urlPath = baseUrl + carImageFolderName.Replace("\\", "/") + "/" + newFileName;
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                foreach (string root in roots)
                 {
-                    formFile.CopyTo(stream);
+                    string filePath = root + $@"\{newFileName}";
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        formFile.CopyTo(stream);
+                    }
                 }
 
-                carImage.ImagePath = filePath;
+                carImage.ImagePath = urlPath;
                 carImage.Date = DateTime.Now;
                 return new SuccessResult();
             }
             return new ErrorResult(Messages.CarImageUploadFailed);
         }
 
-        public static IResult Delete(string path)
+        public static IResult Delete(string fileName)
         {
             try
             {
-                File.Delete(path);
+                foreach (string root in roots)
+                {
+                    string filePath = root + $@"\{fileName}";
+                    File.Delete(filePath);
+                }
                 return new SuccessResult();
             }
             catch (Exception exception)
@@ -52,9 +67,9 @@ namespace Business.Helpers.FileHelpers
         }
 
 
-        //public static string GetDefaultCarImagePath()
-        //{
-        //    return "/" + carImageFolderName + defaultCarImage;
-        //}
+        public static string GetDefaultCarImagePath()
+        {
+            return baseUrl + carImageFolderName.Replace("\\", "/") + "/" + defaultCarImage;
+        }
     }
 }
