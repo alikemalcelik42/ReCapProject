@@ -51,22 +51,22 @@ namespace Business.Concrete
             return result;
         }
 
-        [SecuredOperation("carimagefile.delete,admin")]
+        // [SecuredOperation("carimagefile.delete,admin")]
         [CacheRemoveAspect("ICarImageFileService.Get")]
         public IResult DeleteImage(CarImage carImage)
         {
-            CarImageFileHelper.Delete(carImage.ImagePath);
+            CarImageFileHelper.Delete(CarImageFileHelper.GetFileNameByUrl(carImage.ImagePath));
             return _carImageService.Delete(carImage);
         }
 
         [TransactionScopeAspect]
-        [SecuredOperation("carimagefile.update,admin")]
+        //[SecuredOperation("carimagefile.update,admin")]
         [CacheRemoveAspect("ICarImageFileService.Get")]
         public IResult UpdateImage(CarImage carImage, IFormFile imageFile)
         {
             var oldCarImage = _carImageService.GetById(carImage.Id).Data;
             
-            var deleteResult = CarImageFileHelper.Delete(oldCarImage.ImagePath);
+            var deleteResult = CarImageFileHelper.Delete(CarImageFileHelper.GetFileNameByUrl(oldCarImage.ImagePath));
             if (!deleteResult.Success)
                 throw new Exception(deleteResult.Message);
 
