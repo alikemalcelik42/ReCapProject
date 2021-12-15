@@ -1,6 +1,6 @@
-﻿namespace Core.Utilities.Constants
+﻿namespace Core.Utilities.Messages
 {
-    public static class Messages
+    public static class AspectMessages
     {
         public static string AuthorizationDenied = "Yetkiniz yok";
         public static string NotValidatorClass = "Bu doğrulama sınıfı değil";

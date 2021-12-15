@@ -1,6 +1,6 @@
 ﻿using Castle.DynamicProxy;
 using Core.CrossCuttingConcerns.Logging.Abstract;
-using Core.Utilities.Constants;
+using Core.Utilities.Messages;
 using Core.Utilities.Interceptors;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Core.Aspects.Autofac.Logging
         {
             if (!typeof(ILogger).IsAssignableFrom(loggerType))
             {
-                throw new System.Exception(Messages.NotLoggingClass);
+                throw new System.Exception(AspectMessages.NotLoggingClass);
             }
 
             _loggingType = loggerType;

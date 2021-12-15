@@ -7,7 +7,7 @@ using System.Text;
 using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 using Core.Extensions;
-using Core.Utilities.Constants;
+using Core.Utilities.Messages;
 
 namespace Core.Aspects.Autofac.Secure
 {
@@ -33,7 +33,7 @@ namespace Core.Aspects.Autofac.Secure
                     return;
                 }
             }
-            throw new Exception(Messages.AuthorizationDenied);
+            throw new Exception(AspectMessages.AuthorizationDenied);
         }
     }
 }
