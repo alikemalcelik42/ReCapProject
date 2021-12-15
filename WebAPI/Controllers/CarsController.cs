@@ -1,12 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
@@ -66,13 +60,13 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getcardetailbycarid")]
-        public IActionResult GetCarDetailByCarId(int carId)
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int id)
         {
-            var result = _carService.GetCarDetailByCarId(carId);
+            var result = _carService.GetById(id);
             if (result.Success)
                 return Ok(result);
-            return Ok(result);
+            return BadRequest(result);
         }
 
         [HttpPost("add")]

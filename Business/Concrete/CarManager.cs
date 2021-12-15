@@ -1,21 +1,20 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Secure;
 using Core.Aspects.Autofac.Validation;
-using Core.CrossCuttingConcerns.Validation;
-using Business.Helpers.FileHelpers;
+using Core.CrossCuttingConcerns.Logging.Concrete;
+using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
-using FluentValidation;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Core.Aspects.Autofac.Secure;
-using Core.Aspects.Autofac.Caching;
-using Core.Utilities.Business;
 
 namespace Business.Concrete
 {
@@ -31,6 +30,7 @@ namespace Business.Concrete
         [SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
@@ -39,6 +39,7 @@ namespace Business.Concrete
 
         [SecuredOperation("car.delete,admin")]
         [CacheRemoveAspect("ICarService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
@@ -79,12 +80,9 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id), Messages.CarsListed);
         }
-
-        public IDataResult<List<CarDetailDto>> GetCarDetailByCarId(int carId)
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.Id == carId), Messages.CarsListed);
-        }
-
+        
+        [PerformanceAspect(3)]
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarsListed);
@@ -93,6 +91,7 @@ namespace Business.Concrete
         [SecuredOperation("car.update,admin")]
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Update(Car car)
         {
             _carDal.Update(car);
@@ -101,7 +100,7 @@ namespace Business.Concrete
 
         private IResult MaintentenceTime()
         {
-            if(DateTime.Now.Hour == 2)
+            if (DateTime.Now.Hour == 16)
             {
                 return new ErrorResult("Sistem bakımda");
             }

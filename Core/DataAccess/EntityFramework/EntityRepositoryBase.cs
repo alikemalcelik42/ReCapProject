@@ -1,13 +1,11 @@
-﻿using Core.DataAccess;
-using Core.Abstract.Entities;
+﻿using Core.Abstract.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
-namespace Core.DataAcces.EntityFramework
+namespace Core.DataAccess.EntityFramework
 {
     public class EntityRepositoryBase<TEntity, TContext>
         where TEntity : class, IEntity, new()

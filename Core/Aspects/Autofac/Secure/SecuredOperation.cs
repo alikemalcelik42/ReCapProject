@@ -7,6 +7,7 @@ using System.Text;
 using Castle.DynamicProxy;
 using Microsoft.Extensions.DependencyInjection;
 using Core.Extensions;
+using Core.Utilities.Constants;
 
 namespace Core.Aspects.Autofac.Secure
 {
@@ -32,7 +33,7 @@ namespace Core.Aspects.Autofac.Secure
                     return;
                 }
             }
-            throw new Exception("Yetkiniz yok!");
+            throw new Exception(Messages.AuthorizationDenied);
         }
     }
 }

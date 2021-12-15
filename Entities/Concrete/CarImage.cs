@@ -1,7 +1,5 @@
 ﻿using Core.Abstract.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Entities.Concrete
 {
@@ -9,7 +7,8 @@ namespace Entities.Concrete
     {
         public int Id { get; set; }
         public int CarId { get; set; }
-        public string ImagePath { get; set; }
+        public string ImageFilePath { get; set; }
+        public string ImageRootPath { get; set; }
         public DateTime Date { get; set; }
     }
 }

@@ -15,7 +15,6 @@ namespace Business.Abstract
         IDataResult<List<Car>> GetAllByColorId(int colorId);
         IDataResult<List<Car>> GetAllByDailyPrice(int minDailyPrice, int maxDailyPrice);
         IDataResult<List<CarDetailDto>> GetCarDetails();
-        IDataResult<List<CarDetailDto>> GetCarDetailByCarId(int carId);
         IResult Add(Car car);
         IResult Update(Car car);
         IResult Delete(Car car);
