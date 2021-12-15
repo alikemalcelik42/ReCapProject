@@ -2,6 +2,7 @@
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.IpBan;
 using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Autofac.Secure;
@@ -46,7 +47,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarDeleted);
         }
 
-
+        [IpBanAspect]
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
