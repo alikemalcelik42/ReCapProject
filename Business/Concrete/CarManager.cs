@@ -49,7 +49,6 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarDeleted);
         }
 
-        [LogAspect(typeof(FileLogger))]
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
