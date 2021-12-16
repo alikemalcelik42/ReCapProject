@@ -1,12 +1,13 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Performance;
-using Core.Aspects.Autofac.Secure;
 using Core.Aspects.Autofac.Validation;
-using Core.CrossCuttingConcerns.Logging.Concrete;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -29,6 +30,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CustomerValidator))]
         [CacheRemoveAspect("ICustomerService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Add(Customer customer)
         {
             _customerDal.Add(customer);
@@ -38,6 +40,7 @@ namespace Business.Concrete
         [SecuredOperation("customer.delete,admin")]
         [CacheRemoveAspect("ICustomerService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Delete(Customer customer)
         {
             _customerDal.Delete(customer);
@@ -66,6 +69,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CustomerValidator))]
         [CacheRemoveAspect("ICustomerService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Update(Customer customer)
         {
             _customerDal.Update(customer);

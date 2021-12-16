@@ -1,9 +1,10 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Logging;
-using Core.Aspects.Autofac.Secure;
-using Core.CrossCuttingConcerns.Logging.Concrete;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -24,6 +25,7 @@ namespace Business.Concrete
         [SecuredOperation("brand.add,admin")]
         [CacheRemoveAspect("IBrandService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Add(Brand brand)
         {
             _brandDal.Add(brand);
@@ -33,6 +35,7 @@ namespace Business.Concrete
         [SecuredOperation("brand.delete,admin")]
         [CacheRemoveAspect("IBrandService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Delete(Brand brand)
         {
             _brandDal.Delete(brand);
@@ -53,6 +56,7 @@ namespace Business.Concrete
         [SecuredOperation("brand.update,admin")]
         [CacheRemoveAspect("IBrandService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Update(Brand brand)
         {
             _brandDal.Update(brand);

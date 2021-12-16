@@ -1,10 +1,11 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Logging;
-using Core.Aspects.Autofac.Secure;
 using Core.Aspects.Autofac.Transaction;
-using Core.CrossCuttingConcerns.Logging.Concrete;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
@@ -29,15 +30,16 @@ namespace Business.Concrete
         [SecuredOperation("carimage.add,admin")]
         [CacheRemoveAspect("ICarImageService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         [TransactionScopeAspect]
         public IResult Add(CarImage carImage, IFormFile imageFile)
         {
             var result = BusinessRules.Run(CheckCarImageLimitExceeded(carImage.CarId));
 
-            if(result != null)
+            if (result != null)
                 return result;
 
-            var fileResult =_fileService.Add(imageFile);
+            var fileResult = _fileService.Add(imageFile);
             carImage.ImageFilePath = fileResult.Data.FilePath;
             carImage.ImageRootPath = fileResult.Data.RootPath;
 
@@ -48,6 +50,7 @@ namespace Business.Concrete
         [SecuredOperation("carimage.delete,admin")]
         [CacheRemoveAspect("ICarImageService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Delete(CarImage carImage)
         {
             _fileService.Delete(carImage.ImageFilePath);
@@ -75,6 +78,7 @@ namespace Business.Concrete
         [SecuredOperation("carimage.update,admin")]
         [CacheRemoveAspect("ICarImageService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         [TransactionScopeAspect]
         public IResult Update(CarImage carImage)
         {

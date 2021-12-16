@@ -1,3 +1,0 @@
-﻿Business.Abstract.ICustomerService.Add(Entities.Concrete.Customer) -> Result: Core.Utilities.Results.Concrete.SuccessResult : 15.12.2021 16:23:40
-Business.Abstract.ICarImageService.UpdateWithFile(Entities.Concrete.CarImage,Microsoft.AspNetCore.Http.FormFile) -> Result: Core.Utilities.Results.Concrete.SuccessResult : 15.12.2021 16:29:26
-Business.Abstract.ICarImageService.UpdateWithFile(Entities.Concrete.CarImage,Microsoft.AspNetCore.Http.FormFile) -> Result: Core.Utilities.Results.Concrete.SuccessResult : 15.12.2021 16:30:24

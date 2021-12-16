@@ -1,16 +1,16 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Performance;
-using Core.Aspects.Autofac.Secure;
-using Core.CrossCuttingConcerns.Logging.Concrete;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
-using System;
 using System.Collections.Generic;
 
 namespace Business.Concrete
@@ -27,6 +27,7 @@ namespace Business.Concrete
         [SecuredOperation("rental.add,admin")]
         [CacheRemoveAspect("IRentalService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Add(Rental rental)
         {
             _rentalDal.Add(rental);
@@ -36,6 +37,7 @@ namespace Business.Concrete
         [SecuredOperation("rental.delete,admin")]
         [CacheRemoveAspect("IRentalService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Delete(Rental rental)
         {
             _rentalDal.Delete(rental);
@@ -80,6 +82,7 @@ namespace Business.Concrete
         [SecuredOperation("rental.add,admin")]
         [CacheRemoveAspect("IRentalService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Update(Rental rental)
         {
             _rentalDal.Update(rental);

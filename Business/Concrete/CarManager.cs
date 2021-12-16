@@ -1,13 +1,13 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
-using Core.Aspects.Autofac.IpBan;
+using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Performance;
-using Core.Aspects.Autofac.Secure;
 using Core.Aspects.Autofac.Validation;
-using Core.CrossCuttingConcerns.Logging.Concrete;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
@@ -32,6 +32,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
@@ -41,13 +42,14 @@ namespace Business.Concrete
         [SecuredOperation("car.delete,admin")]
         [CacheRemoveAspect("ICarService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
             return new SuccessResult(Messages.CarDeleted);
         }
 
-        [IpBanAspect]
+        [LogAspect(typeof(FileLogger))]
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
@@ -81,7 +83,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id), Messages.CarsListed);
         }
-        
+
         [PerformanceAspect(3)]
         [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
@@ -93,6 +95,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Update(Car car)
         {
             _carDal.Update(car);

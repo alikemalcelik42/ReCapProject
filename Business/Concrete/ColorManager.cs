@@ -1,9 +1,10 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Logging;
-using Core.Aspects.Autofac.Secure;
-using Core.CrossCuttingConcerns.Logging.Concrete;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -24,6 +25,7 @@ namespace Business.Concrete
         [SecuredOperation("color.add,admin")]
         [CacheRemoveAspect("IColorService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Add(Color color)
         {
             _colorDal.Add(color);
@@ -33,6 +35,7 @@ namespace Business.Concrete
         [SecuredOperation("color.delete,admin")]
         [CacheRemoveAspect("IColorService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Delete(Color color)
         {
             _colorDal.Delete(color);
@@ -53,6 +56,7 @@ namespace Business.Concrete
         [SecuredOperation("color.update,admin")]
         [CacheRemoveAspect("IColorService.Get")]
         [LogAspect(typeof(FileLogger))]
+        [ExceptionLogAspect(typeof(FileLogger))]
         public IResult Update(Color color)
         {
             _colorDal.Update(color);
